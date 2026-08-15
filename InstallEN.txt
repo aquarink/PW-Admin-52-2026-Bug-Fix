@@ -1,0 +1,53 @@
+﻿		PWAdmin 5.2 by alexdnepro
+			monitoring and management of server PW
+
+The program consists of 2 parts: a server (folder server_side) and client (folder client_side)
+
+Preparing for installation:
+1. Run ConfigsEditor.exe and edit the configs
+2. Note that since version 5.2, the password in the pwadmin.conf file for connection from the client side is no longer stored in the clear, you can generate a hash from the client part, or leave the value blank, then the first time you connect the password will be automatically entered
+
+	Installing the server side:
+1. Copy the files from the folder server_side to any folder (eg /pwadmin/)
+2. Exhibiting rights to run the file pwadmin
+3. Try to run pwadmin
+	cd /pwadmin/
+	./pwadmin start
+4. Enjoying the data in the console, with the successful launch there will be a line similar to the following
+	Bind to port 1500...success
+5. If you will bind error address already in use, then the selected port used by another process.
+6. The path to the log file with the chat server part is trying to read from the config to logservice (which is specified in processes_config.ini)
+
+	Installing the client side:
+1. Run the file pwadmin.exe
+2. Pass activation
+3. When you first start, enter data for a connection to the server side
+
+	Short description
+  Autorun instances made on the server side (regardless of whether the client is running or not), list management of autorun instances and activity status autorun made from the client side. If you are using multiple clients per server data autorun list will be updated with each change in any of the clients. Starting with version 3.14, autorun runs all "fallen" instances by one request, it saves memory usage and startup time. In a similar manner, you can run multiple instances from client side manually (for multiselect used keys Ctrl / Shift).
+  When using the editor of the characters multiselect also works in the list of items. To add new bonuses ID, edit file bonusesall.txt. The structure of this file is as follows: a string with the name of the type of bonuses, bonuses string ID, separated by commas. The name of the allowed types of bonuses following prefixes to determine the type of bonuses: ^p - bonus attack speed (the value is calculated by special formula), ^f - for fractional numbers, ^r - bonuses refine, ^s - bonuses sharpening, ^e - bonuses engraving.
+  When you start the server side creates the following files
+autoinstance.txt - autorun instance list
+pwadmin.log - a list of actions that can be accessed from the client side through the "Get event log from the server side"
+pwadmin.maxonline - file with data on the maximum online fixed in the client side
+pwadmin_process_run.log - file with the data flow processes running through pwadmin
+pwadmin_work.log - file with system messages and errors of the server side
+
+	Configurating processes_config.ini
+  The file consists of sections and the number of parameters to each section, the section name corresponds to the name of the process that will be displayed on the client side. If any parameter is not specified - means actions related to its value will be ignored or used standard. You can add an unlimited number of arbitrary sections to add the necessary monitoring processes.
+
+  ProcessDir - full path to the process is allowed to use the variable $HOME$, which will be replaced instead of setting homepath from config pwadmin.conf. Is used when the process starts
+  ProcessFileName - the file name of the process. Is used to find the process from the list and when the process starts (you can use regular expressions)
+  ProcessParams - parameters of start the process. Is used to find the process from the list and when the process starts
+  ProcessKill - shell command to stop the process. If no process is stopped by its PID
+  ProcessStart - shell command to start the process. If used instead of starting with a ProcessFileName and ProcessParams
+  ServerProcess - start and stop the process when you run / stop the game server, default 0
+  StartSleep - pause after launch process, seconds
+  StopSleep - pause after stopping process, seconds
+
+To stop the server side from client side, click "Stop PWAdmin Server", or starting the server side with the stop parameter
+./pwadmin stop
+
+Starting with version 5.0, you can backup using the server part (to run through crontab for example)
+./pwadmin backup	To create a backup of the game database and account database
+./pwadmin fullbackup	To create a full game server backup

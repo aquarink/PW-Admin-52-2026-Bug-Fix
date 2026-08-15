@@ -1,0 +1,6 @@
+.DS_Store
+*.log
+*.orig
+*.maxonline
+pwadmin_process_run.log
+pwadmin_work.log
